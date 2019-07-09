@@ -1,0 +1,10 @@
+.red {
+    color: red;
+}
+
+.list{
+    padding: 10px;
+}
+.list li{
+    line-height: 30px;
+}
