@@ -21,7 +21,9 @@ key=Path        value=D:\dev\nodejs\node_global
 范例：我的配置【我的nodejs 安装在C:\Java\nodejs\路径下】
 
 step1.系统全局配置：
-NODE_PATH C:\Java\nodejs\node_global\node_modules
+NODE_PATH
+C:\Pro\nodejs
+ C:\Java\nodejs\node_global\node_modules
 Path	  C:\Java\nodejs\node_global
 step2.删除用户下Path中的一条关于nodejs的配置，使之使用全局配置！
 
