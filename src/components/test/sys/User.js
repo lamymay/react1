@@ -40,7 +40,6 @@ class User extends React.Component {
                 console.log(response.data);
                 console.log(response.data.data);
                 // console.log(response.data.data.nickname);
-
                 this.setState({
                     users: response.data.data
                 });
