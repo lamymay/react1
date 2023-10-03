@@ -18,3 +18,19 @@ curl 'https://localhost.charlesproxy.com:9000/zero/app/party/start' \
 
   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57' \
   --compressed
+
+
+
+ npm install --save-dev @babel/plugin-proposal-optional-chaining 命令的参数解释如下：
+
+ npm install: 这是使用 Node.js 包管理器 npm 安装依赖包的命令。
+
+ --save-dev: 这是 npm 安装命令的一个选项，它告诉 npm 将安装的包添加到开发依赖项（devDependencies）中。开发依赖项通常包含开发和构建过程中使用的工具和库，而不会包含在最终产品中。在项目中使用这个选项可以确保这个包仅在开发环境中使用，而不会影响到生产环境。
+
+ @babel/plugin-proposal-optional-chaining: 这是要安装的具体 npm 包的名称。它指的是 Babel 插件 @babel/plugin-proposal-optional-chaining，这个插件用于启用 JavaScript 的可选链式操作符特性，允许你更方便地处理对象属性或数组元素的访问，而无需进行繁琐的空值检查。
+
+ 总之，这个命令的作用是安装 Babel 插件 @babel/plugin-proposal-optional-chaining 并将其添加到项目的开发依赖项中，以便在开发和构建过程中使用可选链式操作符特性。
+
+
+
+
