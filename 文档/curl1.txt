@@ -1,0 +1,22 @@
+curl 'https://localhost.charlesproxy.com:9000/zero/file/upload' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryQlzTWX0AQuA4K3Tt' \
+  -H 'Origin: http://192.168.2.102:3000' \
+  -H 'Referer: http://192.168.2.102:3000/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: cross-site' \
+
+
+  -H 'sec-ch-ua: "Microsoft Edge";v="113", "Chromium";v="113", "Not-A.Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  --data-raw $'------WebKitFormBoundaryQlzTWX0AQuA4K3Tt\r\nContent-Disposition: form-data; name="file"; filename="告五人 - 带我去找夜生活.mp3"\r\nContent-Type: audio/mpeg\r\n\r\n\r\n------WebKitFormBoundaryQlzTWX0AQuA4K3Tt--\r\n' \
+
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57' \
+
+  --compressed \
+  --insecure
+

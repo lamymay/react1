@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-
+import React, { Component } from 'react';
+import axiosInstance from './axiosConfig'; // 引入全局配置的 axios 实例
 import QRCode from 'qrcode.react';
-import config from './config'; // 引入配置文件
+import config from './config';
 
 class Party extends Component {
     constructor() {
@@ -16,11 +15,10 @@ class Party extends Component {
         };
         this.audioRef = React.createRef();
         // 请求 URL 常量
-        this.uploadUrl = `${config.server_base_urr}/file/upload`;//后端上传文件接口地址
-        this.createPartyUrl = `${config.server_base_urr}/app/party/start`;//后端创建派对接口地址
-        this.joinPartyUrl = `${config.baseUrl}/party/join`; //前端页面地址 新增的常量
+        this.uploadUrl = `/file/upload`; // 后端上传文件接口地址
+        this.createPartyUrl = `${config.server_base_uri}/app/party/start`; // 后端创建派对接口地址
+        this.joinPartyUrl = `${config.baseUrl}/party/join`; // 前端页面地址 新增的常量
     }
-
 
     openNewTab = () => {
         // 使用配置文件中的baseUrl构建完整的URL
@@ -31,13 +29,13 @@ class Party extends Component {
     };
 
     onFileChange = (event) => {
-        this.setState({selectedFile: event.target.files[0]});
+        this.setState({ selectedFile: event.target.files[0] });
     };
 
     onFileUpload = () => {
-        const {selectedFile, displayName, fileList} = this.state;
+        const { selectedFile, displayName, fileList } = this.state;
         if (!selectedFile) {
-            this.setState({message: '请选择要上传的文件'});
+            this.setState({ message: '请选择要上传的文件' });
             return;
         }
 
@@ -45,7 +43,7 @@ class Party extends Component {
         formData.append('file', selectedFile);
 
         // 上传文件
-        axios
+        axiosInstance
             .post(this.uploadUrl, formData)
             .then((response) => {
                 const fileData = response.data.file;
@@ -56,44 +54,44 @@ class Party extends Component {
             })
             .catch((error) => {
                 console.error('文件上传失败:', error);
-                this.setState({message: `文件上传失败: ${error.message}`});
+                this.setState({ message: `文件上传失败: ${error.message}` });
             });
     };
 
     createParty = (fileList, displayName) => {
         if (fileList.length === 0) {
-            this.setState({message: '请先上传文件'});
+            this.setState({ message: '请先上传文件' });
             return;
         }
 
         const partyData = {
             displayName: displayName || null,
-            fileList: fileList.map((file) => ({id: file.id, uri: file.uri})),
+            fileList: fileList.map((file) => ({ id: file.id, uri: file.uri })),
         };
 
         // 调用创建派对接口
-        axios
+        axiosInstance
             .post(this.createPartyUrl, partyData)
             .then((response) => {
-                const {fileList: responseFileList} = response.data;
+                const { fileList: responseFileList } = response.data;
 
                 if (responseFileList && responseFileList.length > 0) {
                     this.playAudio(0);
                 } else {
-                    this.setState({message: '创建派对成功，但没有文件可播放'});
+                    this.setState({ message: '创建派对成功，但没有文件可播放' });
                 }
             })
             .catch((error) => {
                 console.error('创建派对失败:', error);
-                this.setState({message: `创建派对失败: ${error.message}`});
+                this.setState({ message: `创建派对失败: ${error.message}` });
             });
     };
 
     playAudio = (index) => {
-        const {fileList} = this.state;
+        const { fileList } = this.state;
         if (index >= fileList.length) {
             // 播放完所有音乐文件
-            this.setState({message: '所有音乐文件已播放完毕'});
+            this.setState({ message: '所有音乐文件已播放完毕' });
             return;
         }
 
@@ -101,7 +99,7 @@ class Party extends Component {
         const audioUri = fileList[index].uri;
         audioElement.src = audioUri;
         audioElement.play().then(() => {
-            this.setState({currentFileIndex: index});
+            this.setState({ currentFileIndex: index });
             audioElement.addEventListener('ended', () => {
                 // 当前音乐文件播放完毕后，播放下一个文件
                 this.playAudio(index + 1);
@@ -110,33 +108,32 @@ class Party extends Component {
     };
 
     render() {
-        const {message} = this.state;
+        const { message } = this.state;
         // 构建二维码的内容
         const qrCodeContent = this.joinPartyUrl; // 使用常量
 
         return (
             <div>
-                <h2 style={{textAlign: 'center', color: '#007bff'}}>开启一个派对</h2>
+                <h2 style={{ textAlign: 'center', color: '#007bff' }}>开启一个派对</h2>
                 <div>
-                    <input type="file" onChange={this.onFileChange}/>
+                    <input type="file" onChange={this.onFileChange} />
                     <button onClick={this.onFileUpload}>上传文件</button>
-
                 </div>
                 <p>{message}</p>
-                <audio ref={this.audioRef} controls/>
+                <audio ref={this.audioRef} controls />
 
                 <div>
                     {/* 新增的按钮 */}
                     <button onClick={this.openNewTab}>打开新标签页</button>
                 </div>
                 {/* 显示二维码 */}
-                <div style={{textAlign: 'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     <h3>扫码加入派对</h3>
-                    <QRCode value={qrCodeContent} size={128}/>
+                    <QRCode value={qrCodeContent} size={128} />
                 </div>
 
                 {/* 显示二维码的内容 */}
-                <div style={{textAlign: 'center', marginTop: '20px'}}>
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
                     <p>二维码内容：</p>
                     <p>{qrCodeContent}</p>
                 </div>
