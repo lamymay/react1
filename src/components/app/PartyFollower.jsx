@@ -9,7 +9,7 @@ class PartyFollower extends Component {
             currentAudioIndex: 0,
         };
         this.partyIdOrCode = "64338EC18B6D4955"; // 暂时写死的派对号
-        this.partyDetailUrl = `https://192.168.2.102:9000/zero/app/party/detail/${this.partyIdOrCode}`;
+        this.partyDetailUrl = `/zero/app/party/detail/${this.partyIdOrCode}`;
     }
 
     componentDidMount() {
@@ -23,8 +23,10 @@ class PartyFollower extends Component {
             .then((response) => {
                 const partyData = response.data;
                 if (this.isValidPartyData(partyData)) {
-                    this.setState({ partyData });
-                    this.playMusic();
+                    this.setState({ partyData }, () => {
+                        // 在获取派对详情后自动播放音乐
+                        this.playMusic();
+                    });
                 } else {
                     this.setState({ partyData: null });
                 }

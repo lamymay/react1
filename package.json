@@ -27,6 +27,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.21.0"
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "babel-core": "^6.26.3"
   }
 }
