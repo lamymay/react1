@@ -10,6 +10,7 @@ class PartyFollower extends Component {
         };
         this.partyIdOrCode = "64338EC18B6D4955"; // 暂时写死的派对号
         this.partyDetailUrl = `/zero/app/party/detail/${this.partyIdOrCode}`;
+        this.audioRef = React.createRef();
     }
 
     componentDidMount() {
@@ -23,10 +24,7 @@ class PartyFollower extends Component {
             .then((response) => {
                 const partyData = response.data;
                 if (this.isValidPartyData(partyData)) {
-                    this.setState({ partyData }, () => {
-                        // 在获取派对详情后自动播放音乐
-                        this.playMusic();
-                    });
+                    this.setState({ partyData });
                 } else {
                     this.setState({ partyData: null });
                 }
@@ -49,7 +47,8 @@ class PartyFollower extends Component {
     playMusic = () => {
         const { partyData, currentAudioIndex } = this.state;
         if (partyData && partyData.fileList && partyData.fileList[currentAudioIndex]?.uri) {
-            const audioElement = new Audio(partyData.fileList[currentAudioIndex].uri);
+            const audioElement = this.audioRef.current;
+            audioElement.src = partyData.fileList[currentAudioIndex].uri;
             audioElement.play();
             audioElement.addEventListener('ended', this.playNextMusic);
         }
@@ -79,6 +78,9 @@ class PartyFollower extends Component {
                                 <li key={index}>{file.uri}</li>
                             ))}
                         </ul>
+                        <h3>音乐播放</h3>
+                        <audio ref={this.audioRef} controls />
+                        <button onClick={this.playMusic}>播放音乐</button>
                     </div>
                 ) : (
                     <p>暂时无法加入派对</p>
