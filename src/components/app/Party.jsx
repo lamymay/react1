@@ -15,8 +15,9 @@ class Party extends Component {
         };
         this.audioRef = React.createRef();
         // 请求 URL 常量
-        this.uploadUrl = `/file/upload`; // 后端上传文件接口地址
-        this.createPartyUrl = `${config.server_base_uri}/app/party/start`; // 后端创建派对接口地址
+        this.uploadUrl = `/zero/file/upload`; // 后端上传文件接口地址
+        this.createPartyUrl = `${config.server_base_uri}/zero/app/party/start`; // 后端创建派对接口地址
+
         this.joinPartyUrl = `${config.baseUrl}/party/join`; // 前端页面地址 新增的常量
     }
 
@@ -42,7 +43,6 @@ class Party extends Component {
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        // 上传文件
         axiosInstance
             .post(this.uploadUrl, formData)
             .then((response) => {
