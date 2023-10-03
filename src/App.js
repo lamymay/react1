@@ -20,7 +20,8 @@ import React, {Component} from 'react';
 // import Pic from './components/Pic';
 // import Action from './components/action/Action';
 //import User from './components/test/sys/User';
-import FileUpload from './components/app/FileUpload';
+import Party from './components/app/Party';
+//import PartyFollower from './components/app/PartyFollower';
 
 //这里是根组件
 class App extends Component {
@@ -43,7 +44,7 @@ class App extends Component {
                 {/*<Ray/>*/}
                 {/*<TodoList/>*/}
                 {/*<TodoList2/>*/}
-                <FileUpload/>
+                <Party/>
             </div>
         );
     }
