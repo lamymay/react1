@@ -1,26 +1,5 @@
 
 
-
-curl 'https://localhost.charlesproxy.com:9000/zero/app/party/start' \
-  -H 'sec-ch-ua: "Microsoft Edge";v="113", "Chromium";v="113", "Not-A.Brand";v="24"' \
-  -H 'Accept: application/json, text/plain, */*' \
-  -H 'Content-Type: application/json;charset=UTF-8' \
-  -H 'Referer: http://192.168.2.102:3000/' \
-  -H 'sec-ch-ua-mobile: ?0' \
-
-
-  -H 'sec-ch-ua-platform: "macOS"' \
-  --data-raw '{"displayName":null,"fileList":[{"id":1,"uri":"https://127.0.0.1:9000/zero/file/download/DA313E816D384146"}]}' \
-
-
-
-
-
-  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57' \
-  --compressed
-
-
-
  npm install --save-dev @babel/plugin-proposal-optional-chaining 命令的参数解释如下：
 
  npm install: 这是使用 Node.js 包管理器 npm 安装依赖包的命令。

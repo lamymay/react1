@@ -5,8 +5,7 @@ module.exports = function (app) {
     app.use(
         createProxyMiddleware('/zero/**',
             {  // 发送请求的时候 react会自动去找这个api1，匹配这个路径，然后去发送对的请求
-                // target: 'https://localhost.charlesproxy.com:9000',
-                target: 'https://192.168.2.102:9000',
+                target: 'http://192.168.2.102:9000',
                 changeOrigin: true, //控制服务器接收到的请求头中host字段的值
                 secure: false,
                 //pathRewrite: {'^/zero': ''} // 跟上面匹配，这个api1只是找这个路径用的，实际接口中没有server，所以找个目标地址后，要把server给替换成空

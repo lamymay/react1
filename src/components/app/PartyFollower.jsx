@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
+import QRCodeComponent from './QRCode';
+import config from "./config";
+import AudioPlayer from "./AudioPlayer"; // 引入二维码组件
 
 class PartyFollower extends Component {
     constructor() {
@@ -11,6 +14,8 @@ class PartyFollower extends Component {
         this.partyIdOrCode = "64338EC18B6D4955"; // 暂时写死的派对号
         this.partyDetailUrl = `/zero/app/party/detail/${this.partyIdOrCode}`;
         this.audioRef = React.createRef();
+        this.joinPartyUrl = `${config.baseUrl}/party/join`; // 前端页面地址 新增的常量
+
     }
 
     componentDidMount() {
@@ -24,14 +29,14 @@ class PartyFollower extends Component {
             .then((response) => {
                 const partyData = response.data;
                 if (this.isValidPartyData(partyData)) {
-                    this.setState({ partyData });
+                    this.setState({partyData});
                 } else {
-                    this.setState({ partyData: null });
+                    this.setState({partyData: null});
                 }
             })
             .catch((error) => {
                 console.error('无法加入派对:', error);
-                this.setState({ partyData: null });
+                this.setState({partyData: null});
             });
     };
 
@@ -45,7 +50,7 @@ class PartyFollower extends Component {
     };
 
     playMusic = () => {
-        const { partyData, currentAudioIndex } = this.state;
+        const {partyData, currentAudioIndex} = this.state;
         if (partyData && partyData.fileList && partyData.fileList[currentAudioIndex]?.uri) {
             const audioElement = this.audioRef.current;
             audioElement.src = partyData.fileList[currentAudioIndex].uri;
@@ -63,8 +68,9 @@ class PartyFollower extends Component {
     };
 
     render() {
-        const { partyData } = this.state;
-
+        const {partyData} = this.state;
+        // 构建二维码的内容
+        const qrCodeContent = this.joinPartyUrl; // 使用常量
         return (
             <div>
                 <h2>加入派对</h2>
@@ -79,12 +85,18 @@ class PartyFollower extends Component {
                             ))}
                         </ul>
                         <h3>音乐播放</h3>
-                        <audio ref={this.audioRef} controls />
+                        <AudioPlayer audioUri={this.audioRef} controls />
+
                         <button onClick={this.playMusic}>播放音乐</button>
                     </div>
                 ) : (
                     <p>暂时无法加入派对</p>
                 )}
+
+                <div>
+                    {/* 使用二维码组件 */}
+                    <QRCodeComponent value={qrCodeContent} size={128} />
+                </div>
             </div>
         );
     }
