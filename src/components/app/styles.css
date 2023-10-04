@@ -1,0 +1,8 @@
+/* 启用文本选择 */
+* {
+    user-select: auto !important;
+}
+
+.my-text {
+    color: blue;
+}

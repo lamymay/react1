@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import QRCodeComponent from './QRCode';
-import config from "./config";
-import AudioPlayer from "./AudioPlayer"; // 引入二维码组件
-
+import config from './config';
+import AudioPlayer from './AudioPlayer'; // 引入音频播放器组件
+import './styles.css'; // 导入您的CSS文件
 class PartyFollower extends Component {
     constructor() {
         super();
@@ -15,13 +15,26 @@ class PartyFollower extends Component {
         this.partyDetailUrl = `/zero/app/party/detail/${this.partyIdOrCode}`;
         this.audioRef = React.createRef();
         this.joinPartyUrl = `${config.baseUrl}/party/join`; // 前端页面地址 新增的常量
-
     }
-
     componentDidMount() {
         // 在组件挂载后，调用接口获取派对详情
         this.fetchPartyDetail();
+
+        // 在组件挂载后，确保音频元素已经渲染到 DOM 中，然后再调用 playMusic
+        const audioElement = this.audioRef.current;
+        if (audioElement) {
+            audioElement.addEventListener('canplaythrough', () => {
+                this.playMusic();
+            });
+            audioElement.addEventListener('error', (error) => {
+                console.error('音频播放错误:', error);
+            });
+        }
+
+
+
     }
+
 
     fetchPartyDetail = () => {
         axios
@@ -49,15 +62,40 @@ class PartyFollower extends Component {
         );
     };
 
+
     playMusic = () => {
-        const {partyData, currentAudioIndex} = this.state;
-        if (partyData && partyData.fileList && partyData.fileList[currentAudioIndex]?.uri) {
+        console.log("call playMusic方法 ")
+        try {
+
+            const {currentAudioIndex} = this.state;
             const audioElement = this.audioRef.current;
-            audioElement.src = partyData.fileList[currentAudioIndex].uri;
-            audioElement.play();
-            audioElement.addEventListener('ended', this.playNextMusic);
+
+
+            console.log(this.state.partyData)
+            console.log(this.state.partyData.fileList)
+            console.log(this.state.partyData.fileList[currentAudioIndex])
+            console.log(this.state.partyData.fileList[currentAudioIndex]?.uri)
+            console.log(audioElement)
+
+            if (
+                this.state.partyData &&
+                this.state.partyData.fileList &&
+                this.state.partyData.fileList[currentAudioIndex]?.uri &&
+                audioElement
+            ) {
+                audioElement.src = this.state.partyData.fileList[currentAudioIndex].uri;
+                console.log(this.state.partyData.fileList);
+                console.log("audioElement.src=" + audioElement.src);
+                audioElement.playAudio();
+                audioElement.addEventListener('ended', this.playNextMusic);
+            } else {
+                console.log("else");
+            }
+        } catch (error) {
+            console.error("playMusic error:", error);
         }
     };
+
 
     playNextMusic = () => {
         this.setState((prevState) => ({
@@ -68,9 +106,10 @@ class PartyFollower extends Component {
     };
 
     render() {
-        const {partyData} = this.state;
+        const {partyData, currentAudioIndex} = this.state;
         // 构建二维码的内容
         const qrCodeContent = this.joinPartyUrl; // 使用常量
+
         return (
             <div>
                 <h2>加入派对</h2>
@@ -85,7 +124,7 @@ class PartyFollower extends Component {
                             ))}
                         </ul>
                         <h3>音乐播放</h3>
-                        <AudioPlayer audioUri={this.audioRef} controls />
+                        <AudioPlayer ref={this.audioRef} audioUri={partyData.fileList[currentAudioIndex]?.uri} controls />
 
                         <button onClick={this.playMusic}>播放音乐</button>
                     </div>
@@ -95,7 +134,7 @@ class PartyFollower extends Component {
 
                 <div>
                     {/* 使用二维码组件 */}
-                    <QRCodeComponent value={qrCodeContent} size={128} />
+                    <QRCodeComponent value={qrCodeContent} size={128}/>
                 </div>
             </div>
         );

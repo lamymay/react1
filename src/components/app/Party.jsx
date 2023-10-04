@@ -121,7 +121,8 @@ class Party extends Component {
                     <button onClick={this.onFileUpload}>上传文件</button>
                 </div>
                 <p>{message}</p>
-                <AudioPlayer audioUri={this.audioRef} controls />
+                <AudioPlayer ref={this.audioRef} audioUri={partyData.fileList[currentAudioIndex]?.uri} controls />
+
 
                 <div>
                     {/* 新增的按钮 */}

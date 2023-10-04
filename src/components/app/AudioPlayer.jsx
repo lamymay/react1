@@ -15,6 +15,7 @@ class AudioPlayer extends Component {
 
     playAudio = () => {
         const { audioUri } = this.props;
+        console.log("音频 URI:", audioUri); // 打印音频 URI 到控制台
         const audioElement = this.audioRef.current;
         audioElement.src = audioUri;
         audioElement.play();
