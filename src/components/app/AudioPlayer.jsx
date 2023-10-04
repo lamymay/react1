@@ -1,29 +1,81 @@
+// AudioPlayer.jsx
 import React, { Component } from 'react';
 
 class AudioPlayer extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            currentAudioIndex: 0,
+            isPlaying: false,
+        };
         this.audioRef = React.createRef();
     }
 
+    componentDidMount() {
+        // 在组件挂载后，初始化音频播放
+        this.playMusic();
+    }
+
     componentDidUpdate(prevProps) {
-        // 当父组件传递的音频 URI 发生变化时，更新音频源并播放
-        if (prevProps.audioUri !== this.props.audioUri) {
-            this.playAudio();
+        // 监听派对详情对象的变化，以更新音频源
+        if (prevProps.partyData !== this.props.partyData) {
+            this.playMusic();
         }
     }
 
-    playAudio = () => {
-        const { audioUri } = this.props;
-        console.log("音频 URI:", audioUri); // 打印音频 URI 到控制台
+    playMusic = () => {
+        const { partyData } = this.props;
+        const { currentAudioIndex, isPlaying } = this.state;
         const audioElement = this.audioRef.current;
-        audioElement.src = audioUri;
-        audioElement.play();
+
+        if (
+            partyData &&
+            partyData.fileList &&
+            partyData.fileList.length > 0 &&
+            partyData.fileList[currentAudioIndex]?.uri &&
+            audioElement
+        ) {
+            if (!isPlaying) {
+                // 创建新的音频元素
+                audioElement.src = partyData.fileList[currentAudioIndex].uri;
+
+                // 监听音频结束事件，以便播放下一首
+                audioElement.addEventListener('ended', this.playNextMusic);
+
+                // 播放音频
+                audioElement.play();
+                this.setState({ isPlaying: true });
+            }
+        }
+    };
+
+    playNextMusic = () => {
+        this.setState(
+            (prevState) => ({
+                currentAudioIndex: prevState.currentAudioIndex + 1,
+                isPlaying: false, // 重置播放状态
+            }),
+            () => {
+                this.playMusic();
+            }
+        );
     };
 
     render() {
+        const { partyData } = this.props;
+        const { currentAudioIndex, isPlaying } = this.state;
+
         return (
-            <audio ref={this.audioRef} controls />
+            <div>
+                <h3>音乐播放</h3>
+                {partyData && (
+                    <div>
+                        <p>当前播放: {partyData.fileList[currentAudioIndex]?.uri}</p>
+                        <p>状态: {isPlaying ? '播放中' : '暂停'}</p>
+                    </div>
+                )}
+                <audio ref={this.audioRef} controls />
+            </div>
         );
     }
 }
