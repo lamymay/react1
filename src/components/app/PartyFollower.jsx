@@ -1,4 +1,3 @@
-// PartyFollower.jsx
 import React, { Component } from 'react';
 import axios from 'axios';
 import QRCodeComponent from './QRCode';
@@ -13,6 +12,8 @@ class PartyFollower extends Component {
         };
         this.partyIdOrCode = "64338EC18B6D4955";
         this.partyDetailUrl = `/zero/app/party/detail/${this.partyIdOrCode}`;
+        this.audioRef = React.createRef();
+        this.clientRequestTime = Date.now(); // 设置客户端请求时间
     }
 
     componentDidMount() {
@@ -21,11 +22,16 @@ class PartyFollower extends Component {
 
     fetchPartyDetail = () => {
         axios
-            .get(this.partyDetailUrl)
+            .get(this.partyDetailUrl, {
+                params: {
+                    clientRequestTime: this.clientRequestTime, // 将客户端请求时间作为参数发送
+                },
+            })
             .then((response) => {
                 const partyData = response.data;
                 if (this.isValidPartyData(partyData)) {
                     this.setState({ partyData });
+                    this.playMusic(partyData);
                 } else {
                     this.setState({ partyData: null });
                 }
@@ -38,6 +44,13 @@ class PartyFollower extends Component {
 
     isValidPartyData = (partyData) => {
         return partyData && partyData.fileList && partyData.fileList.length > 0;
+    };
+
+    playMusic = (partyData) => {
+        const audioElement = this.audioRef.current;
+        if (audioElement) {
+            audioElement.playMusic(partyData);
+        }
     };
 
     render() {
@@ -55,12 +68,13 @@ class PartyFollower extends Component {
                                 <li key={index}>{file.uri}</li>
                             ))}
                         </ul>
-                        {/* 将partyData传递给AudioPlayer */}
-                        <AudioPlayer partyData={partyData} />
+                        <AudioPlayer ref={this.audioRef} partyData={partyData} controls />
+
                     </div>
                 ) : (
                     <p>暂时无法加入派对</p>
                 )}
+
                 <div>
                     <QRCodeComponent value={this.partyDetailUrl} size={128} />
                 </div>

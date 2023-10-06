@@ -1,5 +1,4 @@
-// AudioPlayer.jsx
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class AudioPlayer extends Component {
     constructor(props) {
@@ -24,9 +23,15 @@ class AudioPlayer extends Component {
     }
 
     playMusic = () => {
-        const { partyData } = this.props;
-        const { currentAudioIndex, isPlaying } = this.state;
+        const {partyData} = this.props; // 使用 props 中的 partyData
+        const {currentAudioIndex, isPlaying} = this.state;
         const audioElement = this.audioRef.current;
+
+        console.log("call AudioPlayer.jsx playMusic 方法")
+        console.log(this.props)
+        console.log(this.state)
+        console.log(partyData)
+        console.log(partyData.fileList)
 
         if (
             partyData &&
@@ -44,7 +49,11 @@ class AudioPlayer extends Component {
 
                 // 播放音频
                 audioElement.play();
-                this.setState({ isPlaying: true });
+                this.setState({isPlaying: true});
+            } else {
+                // 如果正在播放，暂停音频
+                audioElement.pause();
+                this.setState({isPlaying: false});
             }
         }
     };
@@ -53,7 +62,6 @@ class AudioPlayer extends Component {
         this.setState(
             (prevState) => ({
                 currentAudioIndex: prevState.currentAudioIndex + 1,
-                isPlaying: false, // 重置播放状态
             }),
             () => {
                 this.playMusic();
@@ -62,8 +70,8 @@ class AudioPlayer extends Component {
     };
 
     render() {
-        const { partyData } = this.props;
-        const { currentAudioIndex, isPlaying } = this.state;
+        const {partyData} = this.props;
+        const {currentAudioIndex, isPlaying} = this.state;
 
         return (
             <div>
@@ -74,7 +82,7 @@ class AudioPlayer extends Component {
                         <p>状态: {isPlaying ? '播放中' : '暂停'}</p>
                     </div>
                 )}
-                <audio ref={this.audioRef} controls />
+                <audio ref={this.audioRef} controls/>
             </div>
         );
     }
