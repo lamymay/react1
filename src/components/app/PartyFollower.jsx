@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import QRCodeComponent from './QRCode';
 import AudioPlayer from './AudioPlayer';
 import './styles.css';
+import axiosInstance from "./axiosConfig";
 
 class PartyFollower extends Component {
     constructor() {
@@ -11,6 +12,7 @@ class PartyFollower extends Component {
             partyData: null,
         };
         this.partyIdOrCode = "64338EC18B6D4955";
+        // this.clientRequestTime ;
         this.partyDetailUrl = `/zero/app/party/detail/${this.partyIdOrCode}`;
         this.audioRef = React.createRef();
         this.clientRequestTime = Date.now(); // 设置客户端请求时间
@@ -21,8 +23,9 @@ class PartyFollower extends Component {
     }
 
     fetchPartyDetail = () => {
-        axios
-            .get(this.partyDetailUrl, {
+        // this.setState({clientRequestTime: Date.now() });
+
+        axiosInstance.get(this.partyDetailUrl, {
                 params: {
                     clientRequestTime: this.clientRequestTime, // 将客户端请求时间作为参数发送
                 },

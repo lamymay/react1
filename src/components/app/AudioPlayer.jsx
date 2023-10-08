@@ -31,10 +31,9 @@ class AudioPlayer extends Component {
         console.log(this.props)
         console.log(this.state)
         console.log(partyData)
-        console.log(partyData.fileList)
+        console.log(partyData.fileList);
 
-        if (
-            partyData &&
+        if (partyData &&
             partyData.fileList &&
             partyData.fileList.length > 0 &&
             partyData.fileList[currentAudioIndex]?.uri &&
@@ -43,10 +42,10 @@ class AudioPlayer extends Component {
             if (!isPlaying) {
                 // 创建新的音频元素
                 audioElement.src = partyData.fileList[currentAudioIndex].uri;
+                // audioElement.currentTime = this.props.partyData.playTimeServer / 1000;
 
                 // 监听音频结束事件，以便播放下一首
                 audioElement.addEventListener('ended', this.playNextMusic);
-
                 // 播放音频
                 audioElement.play();
                 this.setState({isPlaying: true});
